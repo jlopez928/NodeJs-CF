@@ -3,10 +3,13 @@ var fs = require("fs")
 
 http.createServer(function(req, res){
    fs.readFile("./index.html", function(err,html){
-        res.wirteHead(200,{
-            "Content-Type":"text/html"
+        res.writeHead(200,{
+            "Content-Type":"application/json"
         })
-        res.write(html)
+        res.write(JSON.stringify({
+            nombre:"Jesus Lopez",
+            username:"jlopez928"
+        }))
         res.end()
    })
 }).listen(3000)
