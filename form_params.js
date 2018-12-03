@@ -1,5 +1,8 @@
 var http = require("http")
 var fs = require("fs")
+var parser = require('./params_parser.js')
+
+var p = parser.parse
 
 http.createServer(function(req, res){
 
@@ -14,35 +17,10 @@ http.createServer(function(req, res){
    fs.readFile("./index.html", function(err,html){
     var htmlString = html.toString()   
     var variables = htmlString.match(/[^\{\}]+(?=\})/g)
-    var arregloParametros = []
-    var parametros = {}
-    var nombre = ""
+    var nombre = "Jesus"
 
-    if (req.url.indexOf("?") > 0 ) {
-        // /?nombre=Jesus&data=algo => ['/','nombre=Jesus&data=algo']
-        var urlData = req.url.split("?")
-        // ['/','nombre=Jesus&data=algo'] => ['nombre=Jesus','data=algo']
-        var arregloParametros = urlData[1].split("&")
-    }
+    var parametros = p(req)
 
-    console.log(arregloParametros)
-
-    for (var i = arregloParametros.length - 1; i >= 0; i--) {
-        var parametro = arregloParametros[i]
-
-        //['nombre=Jesus','data=algo'] => ['nombre','Jesus','data','algo']
-        var paramData = parametro.split("=")
-
-        //[nombre,Jesus] => {nombre: Jesus}
-        parametros[paramData[0]] = paramData[1]
-
-    }
-
-    console.log(parametros)
-
-    console.log("Variables:"+variables)
-    console.log("Variables Longitud:"+variables.length)
-    
     for (var i = variables.length - 1; i >= 0; i--) {
         //[nombre,Jesus]
         //var variable = variables[i]
